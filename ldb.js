@@ -19,10 +19,7 @@ const app = express();
 // ✅ Allow requests from any host in dev (keep cookies working)
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://lumepath.vercel.app",
-    ],           // reflect the request origin
+    origin: true,           // reflect the request origin
     credentials: true,      // allow cookies to be sent
   })
 );
