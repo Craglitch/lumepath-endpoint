@@ -1,32 +1,18 @@
-const express = require('express');
-const router = express.Router();
-const auth = require('../middleware/auth');
-const Post = require('../models/Post');
+// models/Post.js
+const mongoose = require('mongoose');
 
-// Create a post
-router.post('/create', auth, async (req, res) => {
-  try {
-    const post = new Post({
-      content: req.body.content,
-      author: req.user.id,
-      thread: req.body.threadId
-    });
-    await post.save();
-    res.json(post);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+const postSchema = new mongoose.Schema({
+  author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  content: { type: String, maxlength: 280 }, // X-style limit
+  images: [{ type: String }], // Array of image URLs
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  reposts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  replyTo: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' }, // For replies
+  hashtags: [String],
+  isRepost: { type: Boolean, default: false },
+  originalPost: { type: mongoose.Schema.Types.ObjectId, ref: 'Post' } // For reposts
+}, {
+  timestamps: true
 });
 
-// Get posts in a thread
-router.get('/thread/:threadId', async (req, res) => {
-  try {
-    const posts = await Post.find({ thread: req.params.threadId }).populate('author', 'name');
-    res.json(posts);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-module.exports = router;
-
+module.exports = mongoose.model('Post', postSchema);
