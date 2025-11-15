@@ -7,11 +7,14 @@ const router = express.Router();
 // Create post - similar to habits/add
 router.post('/create', auth, async (req, res) => {
   try {
-    const { content, images, hashtags } = req.body;
+    console.log("Create post request:", req.body); // ✅ Add logging
+    console.log("User ID:", req.userId); // ✅ Check if auth works
+
+    const { content, hashtags } = req.body;
     const post = new Post({
       author: req.userId,
       content,
-      images: images || [],
+      images: [], // empty for now
       hashtags: hashtags || []
     });
     await post.save();
