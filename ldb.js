@@ -19,16 +19,16 @@ const postRoutes = require('./routes/posts');
 
 const app = express();
 
-
-// refer to AMIRUL
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://a16cc7aca9fd.ngrok-free.app", // debug url
+    "https://localhost:5173", // Add HTTPS version
+    "https://a16cc7aca9fd.ngrok-free.app",
     "https://lumepath.vercel.app"
   ],
   credentials: true
 }));
+
 // refer to AMIRUL
 // ✅ Middlewares
 app.use(express.json());
